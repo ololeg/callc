@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Callc {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         Map<String, Integer> mapR = Map.of(
                 "I", 1,
@@ -61,13 +61,23 @@ public class Callc {
 
         System.out.println("Введите пример:");
         Scanner scan = new Scanner(System.in);
-
-        String num1 = scan.next();
-        String math1 = scan.next();
-        String num2 = scan.next();
+        String msv = scan.nextLine();
 
         scan.close();
 
+        String num1;
+        String num2;
+        String math1;
+
+        String[] StringArray = msv.split(" ");
+
+        if (StringArray.length !=3) {
+            throw new Exception("Некорректный пример");
+        }
+
+        num1 = StringArray[0];
+        math1 = StringArray[1];
+        num2 = StringArray[2];
 
         Integer n1 = 0;
         Integer n2 = 0;
@@ -79,36 +89,39 @@ public class Callc {
             n1 = (mapG.get(num1));
             n2 = (mapG.get(num2));
         } else if (mapR.containsKey(num1) && mapG.containsKey(num2) || mapG.containsKey(num1) && mapR.containsKey(num2)) {
-            System.err.println("Некорректные данные");
-            return;
+            throw new Exception("Некорректные данные");
         } else if (!mapR.containsKey(num1) || !mapR.containsKey(num2) || !mapG.containsKey(num1) || !mapG.containsKey(num2)) {
-            System.err.println("Некорректные данные");
-            return;
+            throw new Exception("Некорректные данные");
         }
 
         int result = new MyMath().getResult(n1, n2, math1);
 
         if (result == 111) {
-            System.err.println("Некорректные данные");
+            throw new Exception("Некорректные данные");
+
         } else if (mapR.containsKey(num1)) {
-            if (result <= 0) {
-                System.err.println("Некорректные данные");
-            } else if (result >= 100) {
+                if (result <= 0) {
+                throw new Exception("Некорректные данные");
+
+                } else if (result >= 100) {
                 String rome = (mapX.get(result));
                 System.out.println(rome);
-            } else if (result <= 10) {
+
+                } else if (result <= 10) {
                 String rome = (mapV.get(result));
                 System.out.println(rome);
-            } else if (result < 100) {
+
+                } else if (result < 100) {
                 String romeX = (mapX.get(result / 10));
                 String romeW = (mapV.get(result % 10));
 
-                if ((result % 10) <= 0) {
+                    if ((result % 10) <= 0) {
                     System.out.println(romeX);
-                } else {
+                    } else {
                     System.out.println(romeX + romeW);
                 }
             }
+
         } else {
             System.out.println(result);
         }
